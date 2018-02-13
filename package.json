@@ -1,0 +1,20 @@
+{
+  "name": "pommedapi",
+  "version": "1.0.0",
+  "description": "comment sont les pommes ? :)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EryoGreg/Pomme-d-Api.git"
+  },
+  "author": "Ebdo, EryoGreg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EryoGreg/Pomme-d-Api/issues"
+  },
+  "homepage": "https://github.com/EryoGreg/Pomme-d-Api#readme"
+}
