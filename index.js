@@ -1,10 +1,16 @@
+//https://openweathermap.org/current#current_JSON
+
+
 const api = require('./api');
+const settings = require('./settings.json');
 
-const settings = {
-    apiKey: 'dc927e66139d7944ad3fd9ffbcb8c2f0'
-};
-
-api.getWeather('bordeaux', settings).then((data)=> {
-    let objResponse = JSON.parse(data);
-    console.log(objResponse.weather[0].description)
+let city = "Bordeaux";
+api.getCityWeather(city, settings).then((data)=> {
+    console.log("les pommes de "+city+" subissent un climat de type "+data.weather[0].description); // pluie fine /
 }).catch((err)=> console.log(err));
+
+api.getWeather(settings).then((data)=> {
+    console.log("les pommes ont trop de "+data.weather[0].description); // pluie fine /
+}).catch((err)=> console.log(err));
+
+
