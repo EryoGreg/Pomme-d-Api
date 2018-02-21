@@ -8,8 +8,21 @@ module.exports.getCityWeather = async function(city, { apiKey }){ // TODO tablea
     }catch(err) {
         console.error('Erreur de connection à l\'api : \n'+ err)
     }
+};
 
-
+module.exports.getCitiesWeather = async function(cities, { apiKey }){ // TODO tableau de city ?
+    let ret = [];
+    try{
+        for (city of cities) {
+            let response = await request(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=fr&APPID=${apiKey}&units=metric`);
+            response = JSON.parse(response);
+            ret.push(response);
+        }
+        console.log(ret);
+        return ret
+    }catch(err) {
+        console.error('Erreur de connection à l\'api : \n'+ err)
+    }
 };
 
 module.exports.getWeather = async function ({apiKey}) {
