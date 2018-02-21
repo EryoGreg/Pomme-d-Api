@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/EryoGreg/Pomme-d-Api#readme",
   "dependencies": {
+    "commander": "^2.14.1",
     "inquirer": "^5.1.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5"

@@ -4,14 +4,17 @@
 const api = require('./api');
 const settings = require('./settings.json');
 
+const Commander = require('commander'); // https://www.npmjs.com/package/commander
 const inquirer = require('inquirer');
 
 let city = "Bordeaux";
+let answer;
 
-welcomeFunction();
+main();
+async function main() {
+    answer = await welcomeFunction();
 
-function welcomeFunction() {
-    return new Promise(async function (resolve, reject) {
+    async function welcomeFunction() {
         console.log(
             ' ____  _____  __  __  __  __  ____    ____/   __    ____  ____ \n' +
             '(  _ \\(  _  )(  \\/  )(  \\/  )( ___)  (  _ \\  /__\\  (  _ \\(_  _)\n' +
@@ -22,15 +25,15 @@ function welcomeFunction() {
         let answer = await inquirer.prompt([
             {
                 type: 'list',
-                message: 'Aimez vous les pommes ?',
+                message: 'Do you like apples ?',
                 name: 'Pommes',
                 choices: [
-                    'j\'adore !!',
-                    'pas du tout'
+                    "I love it !!",
+                    'Not at all.'
                 ]
             }, {
                 type: 'checkbox',
-                message: 'De quelles pommes parlez vous ?',
+                message: 'Of which city are you interested in ?',
                 name: 'city',
                 choices: [
                     new inquirer.Separator('Les villes :'),
@@ -39,77 +42,68 @@ function welcomeFunction() {
                     'London',
                     'Berlin',
                     'Madrid',
-                    new inquirer.Separator('ajouter une ville'),
-                    'Autre ville',
+                    new inquirer.Separator('An Other City ?'),
+                    'Select a new one',
                 ]
             }
         ]);
-        console.log(answer);
-        if (answer.city.includes('Autre ville')) { //answer contains AutreVille
-            const customCityObj = await inquirer.prompt([
-                {
-                    type: 'input',
-                    message: 'Entrez le nom de la ville',
-                    name: 'city',
-                    validate: function (value) { // que des lettres
-                        var pass = value.match(
-                            /^[a-zA-Z]{2,}/
-                        );
-                        if (pass) {
-                            return true;
+
+        if (answer.city.includes('Select a new one')) { //answer contains Select a new one
+            const customCityObj = await
+                inquirer.prompt([
+                    {
+                        type: 'input',
+                        message: 'Type the city name :',
+                        name: 'city',
+                        validate: function (value) { // que des lettres
+                            var pass = value.match(
+                                /^[a-zA-Z]{2,}/
+                            );
+                            if (pass) {
+                                return true;
+                            }
+                            return 'entrez une ville d\'au moins 2 lettres : ';
                         }
-                        return 'entrez une ville d\'au moins 2 lettres : ';
                     }
-                }
-            ]);
+                ]);
+            answer = await remplaceAutreVille(answer, customCityObj);
 
-            answer = await jsonConcat(answer, customCityObj);
 
-            console.log(answer);
-        }
-    }).catch(err => console.log(err));
-}
-
-function jsonConcat(answers, customCityObj) {
-    for (let key in answers.city) { // pour chaque ville selectionnée
-        if (answers.city[key] == "Autre ville") {
-            answers.city[key] = customCityObj.city
         }
 
+        return answer;
     }
-    return answers;
+
+    function remplaceAutreVille(answer, customCityObj) {
+        for (let key in answer.city) { // pour chaque ville selectionnée
+            if (answer.city[key] == "Select a new one") {
+                answer.city[key] = customCityObj.city
+            }
+
+        }
+        return answer;
+    }
+
+    console.log(answer);
+    api.getCityWeather(city, settings).then((data) => {
+        // si on reçoit de la data :
+        console.log(answer);
+        if (data) {
+            if (answer.Pommes === "I love it !!") {
+                console.log("les pommes de " + city + " subissent un climat de type " + data.weather[0].description); // pluie fine
+            } else {
+                console.log(city + " : "+data.weather[0].description);
+            }
+
+        }
+    }).catch((err) => console.log(err));
 }
-
-/*
-
-api.getCityWeather(city, settings).then((data)=> {
-    // si on reçoit de la data :
-    if (data){
-        console.log("les pommes de "+city+" subissent un climat de type "+data.weather[0].description); // pluie fine /
-    }
-}).catch((err)=> console.log(err));
-
-api.getWeather(settings).then((data)=> {
-    // si on reçoit de la data :
-    if (data){
-        console.log("les pommes ont trop de "+data.weather[0].description); // pluie fine /
-    }
-}).catch((err)=> console.log(err));
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// api.getWeather(settings).then((data)=> {
+//     // si on reçoit de la data :
+//     if (data){
+//         console.log("les pommes ont trop de "+data.weather[0].description); // pluie fine
+//     }
+// }).catch((err)=> console.log(err));
 
 
 // ce que je veux faire :
