@@ -1,0 +1,10 @@
+{
+    "fr": {
+        "test": "text de test en français",
+        "test2": "text de test 2 en français"
+    },
+    "en": {
+        "test": "text of test in english",
+        "test": "text of test 2 in english"
+    }
+}

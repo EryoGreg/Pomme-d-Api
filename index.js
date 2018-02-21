@@ -3,6 +3,7 @@
 //https://openweathermap.org/current#current_JSON
 
 const api = require('./api');
+const lang = require('./lang');
 const settings = require('./settings.json');
 
 const Commander = require('commander'); // https://www.npmjs.com/package/commander
@@ -17,11 +18,10 @@ const program = require('commander');
 // Configuration des paramètres attendus
 program
     .version('1.0.0')
-    .option('-d, --default', 'Show hello world')
-    .option('-c [value], --city [value]', 'get weather of a city')
+    .option('-d --default', 'Show default navigation menu')
+    .option('-c --city [value]', 'get weather of a city')
+    .option('-a, --all', 'Show hello all')
     .option('-s, --someone [name]', 'Say hi to someone');
-// On parse (convertit en format utilisable) les options
-// fonction synchrone
 program.parse(process.argv);
 
 if (program.default) { // -d, --default
@@ -34,15 +34,19 @@ if (program.default) { // -d, --default
         }).catch((err) => console.log(err));
     }).catch((err) => console.log(err));
 
-} else if (program.all) {
-    console.log('Hello all!')
+} else if (program.city) {      // else pour eviter les deux en meme temps
+    api.getCityWeather(program.city, settings).then((data) => {
+        verbose(data)
+    }).catch((err) => console.log(err));
 
-} else if (program.someone) {
+} if (program.all) {
+    console.log('Hello all!')
+} if (program.someone) {
     console.log(`Hello ${program.someone}!`)
-} else {
+
+} if (!program.someone && !program.all && !program.city && !program.default) {
     program.help()
 }
-
 
 
 
@@ -63,6 +67,7 @@ async function welcomeFunction() {
     let answer = await inquirer.prompt([
         {
             type: 'list',
+            // message: 'Do you like apples ?',
             message: 'Do you like apples ?',
             name: 'Pommes',
             choices: [
@@ -123,12 +128,11 @@ function remplaceAutreVille(answer, customCityObj) {
 }
 
 function verbose (data) {
-    console.log(answer);
     if (data) {
-        if (answer.Pommes === "I love it !!") {
+        if (answer && answer.Pommes === "I love it !!") {
             console.log("les pommes de " + data.name + " subissent un climat de type " + data.weather[0].description); // pluie fine
         } else {
-            console.log(city + " : "+data.weather[0].description);
+            console.log(data.name + " : "+data.weather[0].description);
         }
 
     }
