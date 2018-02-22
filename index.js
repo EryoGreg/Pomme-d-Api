@@ -12,7 +12,6 @@ const inquirer = require('inquirer');
 let answer;
 let currentLang = lang.en;
 
-console.log(currentLang);
 
 const program = require('commander');
 // Configuration des paramètres attendus
@@ -21,9 +20,18 @@ program
     .option('-d --default', 'Show default navigation menu')
     .option('-c --city [value]', 'get weather of a city')
     .option('-p, --pommes', 'Vous allez aimer les pommes !')
-    .option('-s, --someone [name]', 'Say hi to someone');
+    .option('-l, --language [value]', 'set language to [fr] or [en]');
 program.parse(process.argv);
 
+if (program.language) {
+    if (program.language === "fr") {
+        currentLang = lang.fr;
+    } else if (program.language === "en") {
+        currentLang = lang.en;
+    } else {
+        console.log(currentLang.lang_err);
+    }
+}
 if (program.default) { // -d, --default
     welcomeFunction().then(rep => {
         answer = rep;
@@ -36,7 +44,7 @@ if (program.default) { // -d, --default
 
 }
 else if (program.city) {      // else pour eviter les deux en meme temps
-    if (program.city === true) {        // l'utilisateur a rentré une ville
+    if (program.city === true) {        // l'utilisateur n'a pas rentré une ville
         console.log("entrez une ville en paramètre \n ex: -c Chicago");
     }else {
         api.getCityWeather(program.city, settings, currentLang).then((data) => {
@@ -45,11 +53,8 @@ else if (program.city) {      // else pour eviter les deux en meme temps
     }
 
 }
-if (program.someone) {
-    console.log(`Hello ${program.someone}!`)
 
-}
-if (!program.someone && !program.pommes && !program.city && !program.default) {
+if (!program.language && !program.pommes && !program.city && !program.default) {
     program.help()
 }
 
@@ -114,7 +119,6 @@ async function welcomeFunction() {
 
     }
 
-    console.log(answer);
     return answer;
 }
 

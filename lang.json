@@ -1,6 +1,7 @@
 {
     "fr": {
 		"lang" : "fr",
+      "lang_err" : "veuillez choisir fr ou en en parametre",
 		"aime" : "Aimes-tu les pommes?",
 		"adore" : "J'adore !",
 		"non_adore" : "Non pas du tout",
@@ -15,6 +16,7 @@
     },
     "en": {
         "lang" : "en",
+        "lang_err" : "please select fr or en as parrameter",
         "aime" : "Do you like apples ?",
 		"adore" : "I love it !!",
 		"non_adore" : "Not at all",
