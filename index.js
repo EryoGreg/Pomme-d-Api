@@ -9,10 +9,10 @@ const settings = require('./settings.json');
 const Commander = require('commander'); // https://www.npmjs.com/package/commander
 const inquirer = require('inquirer');
 
-let city = "Bordeaux";
 let answer;
+let currentLang = lang.en;
 
-
+console.log(currentLang);
 
 const program = require('commander');
 // Configuration des paramètres attendus
@@ -20,41 +20,41 @@ program
     .version('1.0.0')
     .option('-d --default', 'Show default navigation menu')
     .option('-c --city [value]', 'get weather of a city')
-    .option('-a, --all', 'Show hello all')
+    .option('-p, --pommes', 'Vous allez aimer les pommes !')
     .option('-s, --someone [name]', 'Say hi to someone');
 program.parse(process.argv);
 
 if (program.default) { // -d, --default
     welcomeFunction().then(rep => {
         answer = rep;
-        api.getCitiesWeather(answer.cities, settings).then((data) => {
+        api.getCitiesWeather(answer.cities, settings, currentLang).then((data) => {
             for(dat of data) {
                 verbose(dat)
             }
+    }).catch((err) => console.log(err));
+}).catch((err) => console.log(err));
+
+}
+else if (program.city) {      // else pour eviter les deux en meme temps
+    if (program.city === true) {        // l'utilisateur a rentré une ville
+        console.log("entrez une ville en paramètre \n ex: -c Chicago");
+    }else {
+        api.getCityWeather(program.city, settings, currentLang).then((data) => {
+            verbose(data)
         }).catch((err) => console.log(err));
-    }).catch((err) => console.log(err));
+    }
 
-} else if (program.city) {      // else pour eviter les deux en meme temps
-    api.getCityWeather(program.city, settings).then((data) => {
-        verbose(data)
-    }).catch((err) => console.log(err));
-
-} if (program.all) {
-    console.log('Hello all!')
-} if (program.someone) {
+}
+if (program.someone) {
     console.log(`Hello ${program.someone}!`)
 
-} if (!program.someone && !program.all && !program.city && !program.default) {
+}
+if (!program.someone && !program.pommes && !program.city && !program.default) {
     program.help()
 }
 
 
 
-
-
-/*main();
-async function main() {*/
-// answer = await welcomeFunction();
 
 async function welcomeFunction() {
     console.log(
@@ -68,35 +68,35 @@ async function welcomeFunction() {
         {
             type: 'list',
             // message: 'Do you like apples ?',
-            message: 'Do you like apples ?',
+            message: currentLang.aime,
             name: 'Pommes',
             choices: [
-                "I love it !!",
-                'Not at all.'
+                currentLang.adore,
+                currentLang.non_adore
             ]
         }, {
             type: 'checkbox',
-            message: 'Of which cities are you interested in ?',
+            message: currentLang.ville,
             name: 'cities',
             choices: [
-                new inquirer.Separator('Les villes :'),
+                new inquirer.Separator(currentLang.ville_separator),
                 'Bordeaux',
                 'Paris',
                 'London',
                 'Berlin',
                 'Madrid',
-                new inquirer.Separator('An Other City ?'),
-                'Select a new one',
+                new inquirer.Separator(currentLang.autre_ville),
+                currentLang.choisir_autre_ville,
             ]
         }
     ]);
 
-    if (answer.cities.includes('Select a new one')) { //answer contains Select a new one
+    if (answer.cities.includes(currentLang.choisir_autre_ville)) { //answer.cities contains Select a new one
         const customCityObj = await
             inquirer.prompt([
                 {
                     type: 'input',
-                    message: 'Type the city name :',
+                    message: currentLang.rentrer_nom,
                     name: 'cities',
                     validate: function (value) { // que des lettres
                         var pass = value.match(
@@ -105,7 +105,7 @@ async function welcomeFunction() {
                         if (pass) {
                             return true;
                         }
-                        return 'entrez une ville d\'au moins 2 lettres : ';
+                        return currentLang.deux_lettres;
                     }
                 }
             ]);
@@ -114,12 +114,13 @@ async function welcomeFunction() {
 
     }
 
+    console.log(answer);
     return answer;
 }
 
 function remplaceAutreVille(answer, customCityObj) {
     for (let key in answer.cities) { // pour chaque ville selectionnée
-        if (answer.cities[key] == "Select a new one") {
+        if (answer.cities[key] == currentLang.choisir_autre_ville) { // l'objet contient "choisir une autre ville
             answer.cities[key] = customCityObj.cities
         }
 
@@ -129,20 +130,11 @@ function remplaceAutreVille(answer, customCityObj) {
 
 function verbose (data) {
     if (data) {
-        if (answer && answer.Pommes === "I love it !!") {
-            console.log("les pommes de " + data.name + " subissent un climat de type " + data.weather[0].description); // pluie fine
+        if ( program.pommes || answer && answer.Pommes === currentLang.adore) {  // aimez vous les pommes ?
+            console.log(currentLang.returnPomme1 + data.name +" "+ currentLang.retuenPomme2 + data.weather[0].description); // Les pommes de --- subissent un climat de type ---
         } else {
             console.log(data.name + " : "+data.weather[0].description);
         }
 
     }
 }
-
-// }
-// api.getWeather(settings).then((data)=> {
-//     // si on reçoit de la data :
-//     if (data){
-//         console.log("les pommes ont trop de "+data.weather[0].description); // pluie fine
-//     }
-// }).catch((err)=> console.log(err));
-
