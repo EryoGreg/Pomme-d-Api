@@ -13,13 +13,15 @@ let answer;
 let currentLang = lang.en;
 
 
+
 const program = require('commander');
 // Configuration des paramètres attendus
 program
     .version('1.0.0')
-    .option('-d --default', 'Show default navigation menu')
-    .option('-c --city [value]', 'get weather of a city')
+    .option('-d, --default', 'Show default navigation menu')
+    .option('-c, --city [value]', 'get weather of a city')
     .option('-p, --pommes', 'Vous allez aimer les pommes !')
+    .option('-m, --map [value]', 'Affiche la ville indiquée sur la carte')
     .option('-l, --language [value]', 'set language to [fr] or [en]');
 program.parse(process.argv);
 
@@ -53,8 +55,16 @@ else if (program.city) {      // else pour eviter les deux en meme temps
     }
 
 }
+else if (program.map) {      // else pour eviter les deux en meme temps
 
-if (!program.language && !program.pommes && !program.city && !program.default) {
+    if (program.map !== true) {
+        api.showOnMap(program.map, settings, currentLang)
+    } else {
+        api.showOnMap("Bordeaux", settings, currentLang)
+    }
+
+}
+if (!program.language && !program.pommes && !program.city && !program.default && !program.map) {
     program.help()
 }
 
@@ -135,7 +145,7 @@ function remplaceAutreVille(answer, customCityObj) {
 function verbose (data) {
     if (data) {
         if ( program.pommes || answer && answer.Pommes === currentLang.adore) {  // aimez vous les pommes ?
-            console.log(currentLang.returnPomme1 + data.name +" "+ currentLang.retuenPomme2 + data.weather[0].description); // Les pommes de --- subissent un climat de type ---
+            console.log(currentLang.returnPomme1 + data.name +" "+ currentLang.returnPomme2 + data.weather[0].description); // Les pommes de --- subissent un climat de type ---
         } else {
             console.log(data.name + " : "+data.weather[0].description);
         }

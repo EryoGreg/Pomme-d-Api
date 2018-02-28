@@ -1,7 +1,7 @@
 {
     "fr": {
 		"lang" : "fr",
-      "lang_err" : "veuillez choisir fr ou en en parametre",
+      	"lang_err" : "veuillez choisir fr ou en en parametre",
 		"aime" : "Aimes-tu les pommes?",
 		"adore" : "J'adore !",
 		"non_adore" : "Non pas du tout",
@@ -26,7 +26,7 @@
 		"choisir_autre_ville" : "Select a new one",
 		"rentrer_nom" : "Type the city name: ",
 		"deux_lettres" : "enter a city of at least 2 letters: ",
-       "returnPomme1" : "the apples from ",
-       "retuenPomme2" : "are under a "
+       	"returnPomme1" : "the apples from ",
+       	"retuenPomme2" : "are under a "
     }
 }
