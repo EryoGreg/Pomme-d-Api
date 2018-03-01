@@ -17,9 +17,10 @@ const program = require('commander');
 // Configuration des paramètres attendus
 program
     .version('1.0.0')
-    .option('-d --default', 'Show default navigation menu')
-    .option('-c --city [value]', 'get weather of a city')
+    .option('-d, --default', 'Show default navigation menu')
+    .option('-c, --city [value]', 'get weather of a city')
     .option('-p, --pommes', 'Vous allez aimer les pommes !')
+    .option('-m, --map [value]', 'Affiche la ville indiquée sur la carte')
     .option('-l, --language [value]', 'set language to [fr] or [en]');
 program.parse(process.argv);
 
@@ -36,29 +37,35 @@ if (program.default) { // -d, --default
     welcomeFunction().then(rep => {
         answer = rep;
         api.getCitiesWeather(answer.cities, settings, currentLang).then((data) => {
-            for(dat of data) {
+            for (dat of data) {
                 verbose(dat)
             }
+        }).catch((err) => console.log(err));
     }).catch((err) => console.log(err));
-}).catch((err) => console.log(err));
 
 }
 else if (program.city) {      // else pour eviter les deux en meme temps
     if (program.city === true) {        // l'utilisateur n'a pas rentré une ville
         console.log("entrez une ville en paramètre \n ex: -c Chicago");
-    }else {
+    } else {
         api.getCityWeather(program.city, settings, currentLang).then((data) => {
             verbose(data)
         }).catch((err) => console.log(err));
     }
 
 }
+else if (program.map) {      // else pour eviter les deux en meme temps
 
-if (!program.language && !program.pommes && !program.city && !program.default) {
+    if (program.map !== true) {
+        api.showOnMap(program.map, settings, currentLang)
+    } else {
+        api.showOnMap("Bordeaux", settings, currentLang)
+    }
+
+}
+if (!program.language && !program.pommes && !program.city && !program.default && !program.map) {
     program.help()
 }
-
-
 
 
 async function welcomeFunction() {
@@ -132,12 +139,12 @@ function remplaceAutreVille(answer, customCityObj) {
     return answer;
 }
 
-function verbose (data) {
+function verbose(data) {
     if (data) {
-        if ( program.pommes || answer && answer.Pommes === currentLang.adore) {  // aimez vous les pommes ?
-            console.log(currentLang.returnPomme1 + data.name +" "+ currentLang.retuenPomme2 + data.weather[0].description); // Les pommes de --- subissent un climat de type ---
+        if (program.pommes || answer && answer.Pommes === currentLang.adore) {  // aimez vous les pommes ?
+            console.log(currentLang.returnPomme1 + data.name + " " + currentLang.returnPomme2 + data.weather[0].description); // Les pommes de --- subissent un climat de type ---
         } else {
-            console.log(data.name + " : "+data.weather[0].description);
+            console.log(data.name + " : " + data.weather[0].description);
         }
 
     }
