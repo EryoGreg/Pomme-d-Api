@@ -12,7 +12,7 @@
 		"rentrer_nom" : "Rentrez le nom de la ville: ",
 		"deux_lettres" : "Entrez une ville d'au moins 2 lettres: ",
 		"returnPomme1" : "les pommes de ",
-		"retuenPomme2" : "subissent actuellement un(e) "
+		"returnPomme2" : "subissent actuellement un(e) "
     },
     "en": {
         "lang" : "en",
@@ -27,6 +27,6 @@
 		"rentrer_nom" : "Type the city name: ",
 		"deux_lettres" : "enter a city of at least 2 letters: ",
        	"returnPomme1" : "the apples from ",
-       	"retuenPomme2" : "are under a "
+       	"returnPomme2" : "are under "
     }
 }
