@@ -6,14 +6,13 @@ const api = require('./api');
 const lang = require('./lang');
 const settings = require('./settings.json');
 
-const Commander = require('commander'); // https://www.npmjs.com/package/commander
 const inquirer = require('inquirer');
 
 let answer;
 let currentLang = lang.en;
 
 
-const program = require('commander');
+const program = require('commander'); // https://www.npmjs.com/package/commander
 // Configuration des paramètres attendus
 program
     .version('1.0.0')

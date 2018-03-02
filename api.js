@@ -42,7 +42,13 @@ module.exports.showOnMap = async function (city, settings, currentLang) {
             , columnWidth: [24, 10, 10]
         });
 
-    let data = await this.getCityWeather(city, settings, currentLang);
+    try {
+        var data = await this.getCityWeather(city, settings, currentLang); // var et non pour le sortir de ce scope (on purpose)
+        //
+        // plus propre que de le déclarer plus haut sans l'instancier
+    }catch (err) {
+        console.log("Une erreur est survenue lors de la récuperation des informations de la Ville de "+city+" : "+err);
+    }
 
 
     screen.append(map);
