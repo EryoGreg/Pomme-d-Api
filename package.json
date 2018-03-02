@@ -25,5 +25,8 @@
     "inquirer": "^5.1.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5"
+  },
+  "bin": {
+    "Pomme": "./index.js"
   }
 }
