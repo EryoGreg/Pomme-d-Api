@@ -1,8 +1,11 @@
 # Pomme-d-Api
 
 Comment sont les Pommes de votre région ? :D
-
+	
 Avant toutes chose, veuillez écrire dans votre CLI : "set TERM=windows-ansi" afin de résoudre un problème récurrent dans l'utilisation de Pomme d'Api
+
+Pour lancer Pomme d'Api, utilisez un CLI et allez dans le dossier parent Pomme-d-Api. Lancez l'appli avec la commande "npm start".
+
 Commandes utiles:
 "node index.js -V": vous renvoie la version actuelle de Pomme d'Api sur votre ordinateur.
 "node index.js -d": lance le programme avec les paramètres par défauts.
@@ -19,3 +22,5 @@ Pour les problèmes liés à la carte de navigation, essayez ceci:
 -suivre ce petit tuto pour installer la font : https://www.techrepublic.com/blog/windows-and-office/quick-tip-add-fonts-to-the-command-prompt/
 
 ENJOY !
+
+L'application n'est pas exempté de bugs ou erreurs. Si vous en trouvez, merci d'envoyer un mail à pomme.d.api@gmail.com contenant un screenshot de l'erreur ainsi qu'une explication sommaire de la façon dont c'est arrivé.
